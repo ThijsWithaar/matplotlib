@@ -34,7 +34,7 @@ try
 	f.add_subplot(1,2,2);
 	p.imshow(I, {
 		{"interpolation","nearest"},
-		{"cmap","gray"}
+		{"cmap","hsv"}
 	});
 	p.colorbar();
 

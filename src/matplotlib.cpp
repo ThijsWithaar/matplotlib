@@ -95,9 +95,9 @@ Figure MatplotLib::figure(int nr, std::array<double,2> size)
 	py::object handle;
 	if(size[0] > 0)
 	{
-		py::dict options;
-		options["figsize"] = pybind11::make_tuple(size[0], size[1]);
-		handle = figure(nr, options);
+		py::kwargs kw;
+		kw["figsize"] = pybind11::make_tuple(size[0], size[1]);
+		handle = figure(nr, **kw);
 	}
 	else
 	{
