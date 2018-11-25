@@ -107,25 +107,36 @@ Figure MatplotLib::figure(int nr, std::array<double,2> size)
 	return Figure(std::make_unique<Figure::Impl>(handle));
 }
 
-void MatplotLib::plot(
-	Eigen::Ref<Eigen::ArrayXd> x,
-	Eigen::Ref<Eigen::ArrayXd> y,
-	const options_t& options)
+void MatplotLib::plot(vecin_t x, vecin_t y, const options_t& options)
 {
 	plot(x, y, "", options);
 }
 
-void MatplotLib::plot(
-		Eigen::Ref<Eigen::ArrayXd> x,
-		Eigen::Ref<Eigen::ArrayXd> y,
-		std::string style,
-		const options_t& options)
+void MatplotLib::plot(vecin_t x, vecin_t y, std::string style, const options_t& options)
 {
 	auto kw = asKwargs(options);
 	if(style.empty())
 		m->pp.attr("plot")(x, y, **kw);
 	else
 		m->pp.attr("plot")(x, y, style, **kw);
+}
+
+void MatplotLib::semilogx(vecin_t x, vecin_t y, const options_t& options)
+{
+	auto kw = asKwargs(options);
+	m->pp.attr("semilogx")(x, y, **kw);
+}
+
+void MatplotLib::semilogy(vecin_t x, vecin_t y, const options_t& options)
+{
+	auto kw = asKwargs(options);
+	m->pp.attr("semilogy")(x, y, **kw);
+}
+
+void MatplotLib::loglog(vecin_t x, vecin_t y, const options_t& options)
+{
+	auto kw = asKwargs(options);
+	m->pp.attr("loglog")(x, y, **kw);
 }
 
 void MatplotLib::imshow(Eigen::Ref<Eigen::MatrixXd> I, const options_t& options)
@@ -159,9 +170,36 @@ void MatplotLib::title(std::string t)
 	m->pp.attr("title")(t);
 }
 
+std::array<double, 2> MatplotLib::xlim()
+{
+	py::tuple lm = m->pp.attr("xlim")();
+	return std::array<double, 2>{lm[0].cast<double>(), lm[1].cast<double>()};
+}
+
+void MatplotLib::xlim(double left, double right)
+{
+	m->pp.attr("xlim")(left, right);
+}
+
+std::array<double, 2> MatplotLib::ylim()
+{
+	py::tuple lm = m->pp.attr("ylim")();
+	return std::array<double, 2>{lm[0].cast<double>(), lm[1].cast<double>()};
+}
+
+void MatplotLib::ylim(double bottom, double top)
+{
+	m->pp.attr("ylim")(bottom, top);
+}
+
 void MatplotLib::savefig(std::string fname)
 {
 	m->pp.attr("savefig")(fname);
+}
+
+void MatplotLib::xkcd()
+{
+	m->pp.attr("xkcd")();
 }
 
 void MatplotLib::show()
